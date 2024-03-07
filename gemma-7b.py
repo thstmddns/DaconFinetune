@@ -30,6 +30,9 @@ for _, row in tqdm(data.iterrows()):
             formatted_data.append(input_ids)
 print('Done.')
 
+df = pd.DataFrame(formatted_data)
+df.to_csv('Handy_s.w', index= False, encoding='utf_8_sig')
+
 # 모델로드
 model = AutoModelForCausalLM.from_pretrained('google/gemma-7b')
 model.to(device)
