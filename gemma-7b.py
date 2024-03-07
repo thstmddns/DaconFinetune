@@ -1,18 +1,13 @@
 import pandas as pd
 import numpy as np
 import torch
-from transformers import GPT2LMHeadModel, AutoTokenizer, AdamW, AutoModelForCausalLM
+from transformers import AutoTokenizer, AdamW, AutoModelForCausalLM
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer 
 
 # cuda 사용여부 확인
-<<<<<<< HEAD
-<<<<<<< HEAD
 # https://pytorch.org/get-started/locally/
-=======
->>>>>>> 99bfe855b260dee1df61123caceb1dda7e5a21e1
-=======
->>>>>>> 99bfe855b260dee1df61123caceb1dda7e5a21e1
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f'Using device : {device}')
 
