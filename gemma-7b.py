@@ -17,7 +17,7 @@ print(f'Using device : {device}')
 data = pd.read_csv('data/train.csv')
 
 # 토크나이저 로드
-tokenizer = AutoTokenizer.from_pretrained('google/gemma-7b', eos_token='</s>')
+tokenizer = AutoTokenizer.from_pretrained('google/gemma-2b', eos_token='</s>')
 
 # 데이터 포맷팅 및 토크나이징
 formatted_data = []
@@ -30,12 +30,8 @@ for _, row in tqdm(data.iterrows()):
             formatted_data.append(input_ids)
 print('Done.')
 
-df = pd.DataFrame(formatted_data)
-df.to_csv('Handy_s.w', index= False, encoding='utf_8_sig')
-
 # 모델로드
-model = AutoModelForCausalLM.from_pretrained('google/gemma-7b')
-model.to(device)
+model = AutoModelForCausalLM.from_pretrained('google/gemma-2b').to(device)
 # 모델 학습 하이퍼파라미터(Hyperparameter) 세팅
 # 실제 필요에 따라 조정
 CFG = {
@@ -44,7 +40,7 @@ CFG = {
 }
 
 # 모델 학습 설정
-optimizer = torch.optim.AdamW(model.parameters(), lr=CFG['LR'])
+optimizer = AdamW(model.parameters(), lr=CFG['LR'])
 model.train()
 
 # 모델 학습
@@ -69,13 +65,12 @@ for epoch in range(CFG['EPOCHS']):
     print(f"Epoch {epoch+1}/{CFG['EPOCHS']}, Average Loss: {total_loss / len(formatted_data)}")
 
 # 모델 저장
-model.save_pretrained("./hansoldeco-gemma-7b")
-tokenizer.save_pretrained("./hansoldeco-gemma-7b")
+model.save_pretrained("./hansoldeco-gemma-2b")
+tokenizer.save_pretrained("./hansoldeco-gemma-2b")
 
 # 저장된 Fine-tuned 모델과 토크나이저 불러오기
-model_dir = './hansoldeco-gemma-7b'
-model = AutoModelForCausalLM.from_pretrained(model_dir)
-model.to(device)
+model_dir = './hansoldeco-gemma-7'
+model = AutoModelForCausalLM.from_pretrained(model_dir).to(device)
 tokenizer = AutoTokenizer.from_pretrained(model_dir)
 
 # Inference를 위한 test.csv 파일로드
@@ -106,8 +101,7 @@ for test_question in tqdm(test['질문']):
         full_text = tokenizer.decode(generated_sequence, skip_special_tokens=False)
         # 질문과 답변의 사이를 나타내는 eos_token (</s>)를 찾아, 이후부터 출력
         answer_start = full_text.find(tokenizer.eos_token) + len(tokenizer.eos_token)
-        answer_only = full_text[answer_start:].strip()
-        answer_only = answer_only.replace('\n', ' ')
+        answer_only = full_text[answer_start:].strip().replace('\n', ' ')
         # 답변을 출력해보자
         # print(answer_only)
         preds.append(answer_only)
@@ -117,12 +111,11 @@ model = SentenceTransformer('distiluse-base-multilingual-cased-v1')
 
 # 생성한 모든 응답(답변)으로부터 Embedding Vector 추출
 pred_embeddings = model.encode(preds)
-pred_embeddings.shape
+# pred_embeddings.shape
 
 submit = pd.read_csv('data/sample_submission.csv')
 # 제출 양식 파일(sample_submission.csv)을 활용하여 embedding Vector로 변환한 결과를 삽입
 submit.iloc[:, 1:] = pred_embeddings
-submit.head()
 
 #  리더보드 제출을 위한 csv 파일 생성
 submit.to_csv(f'data/baseline_submit.csv', index=False) 
