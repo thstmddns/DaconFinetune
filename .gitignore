@@ -47,8 +47,11 @@ torchaudio-2.2.1+cu118.dist-info/
 torchvision/
 torchvision-0.17.1+cu118.dist-info/
 torio/
+<<<<<<< HEAD
 tensorflow/
 
+=======
+>>>>>>> 99bfe855b260dee1df61123caceb1dda7e5a21e1
 
 # 제외할 파일
 /hansoldeco-kogpt2/config.json
@@ -56,6 +59,10 @@ tensorflow/
 /hansoldeco-kogpt2/model.safetensors
 /hansoldeco-kogpt2/special_tokens_map.json
 /hansoldeco-kogpt2/tokenizer.json
+<<<<<<< HEAD
 /hansoldeco-kogpt2/tokenizer_config.json
 /lib/torch_cpu.dll
 
+=======
+/hansoldeco-kogpt2/tokenizer_config.json
+>>>>>>> 99bfe855b260dee1df61123caceb1dda7e5a21e1
