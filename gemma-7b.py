@@ -37,7 +37,7 @@ model = AutoModelForCausalLM.from_pretrained('google/gemma-2b').to(device)
 # 실제 필요에 따라 조정
 CFG = {
     'LR' : 2e-5, # Learning Rate
-    'EPOCHS' : 10 # 학습 Epoch
+    'EPOCHS' : 100 # 학습 Epoch
 }
 
 # 모델 학습 설정
@@ -66,8 +66,8 @@ for epoch in range(CFG['EPOCHS']):
     print(f"Epoch {epoch+1}/{CFG['EPOCHS']}, Average Loss: {total_loss / len(formatted_data)}")
 
 # 모델 저장
-model.save_pretrained("./hansoldeco-gemma-2b")
-tokenizer.save_pretrained("./hansoldeco-gemma-2b")
+model.save_pretrained("model/hansoldeco-gemma-2b")
+tokenizer.save_pretrained("model/hansoldeco-gemma-2b")
 
 # 저장된 Fine-tuned 모델과 토크나이저 불러오기
 model_dir = './hansoldeco-gemma-7'
